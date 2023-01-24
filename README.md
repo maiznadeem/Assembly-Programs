@@ -1,2 +1,2 @@
 # Assembly-Programs
-All solved asm files .
+All solved asm files.

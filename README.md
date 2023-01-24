@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="http://https://github.com/MaizNadeem/Assembly-Programs/blob/main/Banner.jpg" />
+  <img src="http://https://github.com/MaizNadeem/Assembly-Programs/blob/main/Banner.jpg?raw=true"
+  alt="Banner Image" />
 </p>
 
 # Microprocessor and Assembly Language.

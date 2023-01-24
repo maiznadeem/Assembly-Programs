@@ -1,0 +1,20 @@
+	ORG 100H     
+	      
+	.DATA
+
+		QUOTIENT DW 0
+		DIVISOR DW 5     
+		DIVIDEND DW 25 
+
+	.CODE     
+
+			MOV AX, DIVIDEND 
+
+		L1:	INC QUOTIENT
+			SUB AX, DIVISOR
+			CMP AX, DIVISOR
+			JGE L1 
+
+			MOV CX, QUOTIENT
+
+	RET

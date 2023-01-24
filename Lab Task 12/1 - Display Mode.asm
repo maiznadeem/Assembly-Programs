@@ -1,0 +1,74 @@
+	ORG 100h
+
+	.DATA
+
+		STR1 	DB 	'MAIZ NADEEM$'
+		SIZE 	DW	11
+
+	.CODE
+
+	MAIN PROC
+					MOV AH, 0
+					MOV AL, 3
+					INT 10h
+
+					MOV AX, 0xB800
+					MOV ES, AX
+					MOV SI, (13-1)*160 + (5-1)*2
+
+					MOV CX, SIZE
+					MOV AH, 0x07
+					XOR BX, BX
+
+		NAMEPRINT:	MOV AL, [STR1 + BX]
+					MOV ES:SI, AX
+					ADD SI, 2
+					INC BX
+					LOOP NAMEPRINT
+
+		PROCCALL:	CALL LEFT 
+					JMP PROCCALL
+	
+					RET
+	MAIN ENDP
+
+
+	LEFT PROC
+
+					MOV CX, SIZE
+
+		ERASE:		CMP SI, 1920
+					JLE ERASE2
+					SUB SI, 2
+					MOV ES:SI, 0X0720
+					LOOP ERASE
+					JMP AFTER
+
+		ERASE2:		MOV SI, 2078
+					MOV ES:SI, 0X0720
+					JMP ERASE
+
+		AFTER:		MOV CX, SIZE
+					MOV BX, 0
+					SUB SI, 2
+					MOV DX, 1920
+
+					CMP SI, 1918
+					JNE  NAMEPRINT2
+					MOV SI, 2078
+
+		NAMEPRINT2:	CMP SI, 2080
+					JGE NAMEPRINT3
+					MOV AL, [STR1 + BX]
+					MOV ES:SI, AX
+					ADD SI, 2
+					INC BX
+					LOOP NAMEPRINT2
+					RET
+
+		NAMEPRINT3:	MOV SI, DX
+					SUB DX, 2
+					JMP NAMEPRINT2
+
+					RET
+	LEFT ENDP

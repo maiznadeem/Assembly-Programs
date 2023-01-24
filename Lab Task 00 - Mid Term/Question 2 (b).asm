@@ -1,0 +1,33 @@
+	ORG 100H
+
+	.DATA
+
+	S	 	DW 	0, 1, 2, 7 DUP (2)
+
+	.CODE 
+
+	LEA SI, S
+	XOR BX, BX
+	ADD SI, 6
+
+
+	LOOPARRAY:
+	INC BX
+	MOV DX, 0
+
+	SUB SI, 2
+	ADD DX, [SI]
+	SUB SI, 2
+	ADD DX, [SI]
+	SUB SI, 2
+	SUB DX, [SI]
+
+	ADD SI, 6
+	MOV [SI], DX
+	ADD SI, 2
+
+	CMP BX, 7
+	JL LOOPARRAY
+
+
+	RET

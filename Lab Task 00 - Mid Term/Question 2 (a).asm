@@ -1,0 +1,42 @@
+	ORG 100H
+
+	.DATA
+
+	DIFF 	DB 	?
+	X   	DB	7
+	Y   	DB 	3
+
+
+	.CODE 
+				XOR CX, CX
+				MOV DL, X
+				MOV BL, Y
+
+				CMP DL, BL
+				JGE XGREAT
+				MOV DIFF, BL
+				JMP REMAINDER
+
+	    XGREAT: MOV DIFF, DL
+	    		JMP REMAINDER
+
+	 REMAINDER: XOR AX, AX
+	 			MOV AL, DIFF
+	 			MOV CL, X
+	 			DIV CL
+
+	 			CMP AH, 0
+	 			JNE NOTEQUAL
+
+	 			XOR AX, AX
+	 			MOV AL, DIFF
+	 			MOV CL, Y
+	 			DIV CL
+	 			CMP AH, 0
+	 			JE  EQUAL
+
+
+	  NOTEQUAL: INC DIFF
+	  			JMP REMAINDER
+
+	  	 EQUAL: RET

@@ -1,0 +1,99 @@
+	ORG 100h
+
+	.DATA
+
+		STR1 	DB 	'MAIZ NADEEM'
+		SIZE 	DW	11
+		TFLAG 	DB	0
+		COUNT	DB 	0
+
+	.CODE
+
+	MAIN PROC
+
+					MOV BX, 0
+					MOV ES, BX
+					
+					CLI
+					MOV ES:[0x8*4], OFFSET [TISR]
+					MOV ES:[0x8*4+2], CS
+					STI
+
+					MOV AH, 0
+					MOV AL, 3
+					INT 10h
+
+					MOV AX, 0xB800
+					MOV ES, AX
+					MOV SI, (13-5-1)*160 + (40-1)*2
+
+					MOV CX, SIZE
+					MOV AH, 0x07
+					XOR BX, BX
+
+		NAMEPRINT:	MOV AL, [STR1 + BX]
+					MOV ES:SI, AX
+					ADD SI, 80*2
+					INC BX
+					LOOP NAMEPRINT
+
+
+		PROCCALL:	CMP TFLAG, 1
+					JNE SKIP
+
+					MOV TFLAG, 0
+					CALL RIGHT
+					
+		SKIP:		JMP PROCCALL
+
+	
+					RET
+	MAIN ENDP
+	
+
+		TISR:		PUSH AX
+			 		INC COUNT
+			 		CMP COUNT, 18
+			 		JNE EXIT
+			 		MOV TFLAG, 1
+			 		MOV COUNT, 0
+
+
+		EXIT:		MOV AL, 0x020
+					OUT 0x20, AL
+					POP AX
+					IRET
+
+
+	RIGHT PROC
+
+					MOV CX, SIZE
+
+		ERASE:		SUB SI, 80*2
+					MOV ES:SI, 0X0720
+					LOOP ERASE
+
+					MOV CX, SIZE
+					MOV BX, 0
+					ADD SI, 2
+					CMP SI, 1280
+					JGE	SHIFTLEFT
+
+		NAMEPRINT2:	MOV AL, [STR1 + BX]
+					MOV ES:SI, AX
+					ADD SI, 80*2
+					INC BX
+					LOOP NAMEPRINT2
+					
+					RET
+
+		SHIFTLEFT:	MOV SI, (13-5-1)*160
+
+		NAMEPRINT3:	MOV AL, [STR1 + BX]
+					MOV ES:SI, AX
+					INC BX
+					ADD SI, 80*2
+					LOOP NAMEPRINT3
+
+					RET
+	RIGHT ENDP

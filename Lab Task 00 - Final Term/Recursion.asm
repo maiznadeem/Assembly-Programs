@@ -1,0 +1,95 @@
+	ORG 100h
+
+	.DATA
+
+	RESULT	DW	0
+	TERM1	DW	0
+	TERM2	DW	0
+	TERM3	DW	0
+	N 		DW	4
+
+	.CODE
+
+	MAIN PROC
+
+				MOV AX, N
+				DEC AX
+				PUSH AX
+				CALL SEQUENCE
+
+	RET
+	MAIN ENDP
+
+
+	SEQUENCE PROC
+
+				MOV BP, SP
+				MOV BX, [BP+2]
+				MOV N, BX
+
+				CMP N, 0
+				JNE CMP2
+				MOV RESULT, 2
+				JMP EXIT
+
+	CMP2:		CMP N, 1
+				JNE CMP3
+				MOV RESULT, 4
+				JMP EXIT
+
+	CMP3:		CMP N, 2
+				JNE NEXT
+				MOV RESULT, 7
+				JMP EXIT
+
+
+	NEXT:		DEC N
+				PUSH N
+				CALL SEQUENCE
+
+				MOV BP, SP
+				MOV BX, [BP+2]
+				MOV N, BX
+
+				PUSH RESULT
+
+				SUB N, 2
+				PUSH N
+				CALL SEQUENCE
+
+				POP TERM3
+				MOV BP, SP
+				MOV BX, [BP+2]
+				MOV N, BX
+
+				PUSH RESULT
+
+				SUB N, 3
+				PUSH N
+				CALL SEQUENCE
+
+
+				POP TERM2
+				MOV BP, SP
+				MOV BX, [BP+2]
+				MOV N, BX
+
+				MOV BX, RESULT
+				MOV TERM1, BX
+				MOV RESULT, 0
+
+				MOV AX, TERM1
+				MOV BX, 4
+				MUL BX
+				MOV RESULT, AX
+				MOV AX, TERM3
+				MUL N
+				SUB AX, TERM2
+				ADD RESULT, AX
+				MOV AX, TERM3
+				MOV RESULT, AX
+
+
+	EXIT:			
+	RET 2
+	SEQUENCE ENDP

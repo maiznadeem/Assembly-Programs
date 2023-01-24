@@ -1,4 +1,6 @@
-![Banner](https://github.com/MaizNadeem/Assembly-Programs/blob/main/Banner.jpg)
+<p align="center">
+  <img src="http://https://github.com/MaizNadeem/Assembly-Programs/blob/main/Banner.jpg" />
+</p>
 
 # Microprocessor and Assembly Language.
 
